@@ -102,6 +102,7 @@ class Categoria
 
             Produto novoProduto = new Produto(nomeProduto, unidadeDeMedida, preco);
             this.produtos.Add(novoProduto);
+            Console.WriteLine($"Produto '{nomeProduto}' cadastrado com sucesso na categoria '{GetNomeComCor()}'!");
             return true;
         }
         else

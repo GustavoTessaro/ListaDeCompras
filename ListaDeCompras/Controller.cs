@@ -10,6 +10,7 @@ class Controller
 
     {
         this.categorias = new List<Categoria>();
+        this.listaDeCompras = new List<ListaDeCompra>();
     }
 
     #endregion
