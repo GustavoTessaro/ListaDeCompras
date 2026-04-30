@@ -84,30 +84,46 @@ class Categoria
     }
     public bool CadastrarProduto()
     {
-        Console.Write($"Digite o nome do produto para a categoria '{GetNomeComCor()}': ");
+        Console.Write($"\nDigite o nome do produto para a categoria '{GetNomeComCor()}': ");
         string nomeProduto = Console.ReadLine() ?? "";
+
+        if(nomeProduto.Length < 2 || nomeProduto.Length > 100)
+        {
+            Console.WriteLine("\nO nome do produto deve conter entre 2 e 100 caracteres. Tente Novamente!");
+            return false;
+        }
 
         if (nomeProduto != "")
         {
-            Console.Write("Digite a unidade de medida do produto(ex: kg, unidade, litro, caixa): ");
+
+            foreach (var produto in produtos)
+            {
+                if (produto.getNome().Equals(nomeProduto, StringComparison.OrdinalIgnoreCase))
+                {
+                    Console.WriteLine("Já existe um produto com esse nome nesta categoria. Tente Novamente!");
+                    return false;
+                }
+            }
+
+            Console.Write("\nDigite a unidade de medida do produto(ex: kg, unidade, litro, caixa): ");
             string unidadeDeMedida = Console.ReadLine() ?? "Não Informada";
 
-            Console.Write("Digite o preço do produto: ");
+            Console.Write("\nDigite o preço do produto: ");
             double preco;
 
             while (!double.TryParse(Console.ReadLine(), out preco))
             {
-                Console.Write("Valor inválido. Digite um número para o preço: ");
+                Console.Write("\nValor inválido. Digite um número para o preço: ");
             }
 
             Produto novoProduto = new Produto(nomeProduto, unidadeDeMedida, preco);
             this.produtos.Add(novoProduto);
-            Console.WriteLine($"Produto '{nomeProduto}' cadastrado com sucesso na categoria '{GetNomeComCor()}'!");
+            Console.WriteLine($"\nProduto '{nomeProduto}' cadastrado com sucesso na categoria '{GetNomeComCor()}'!");
             return true;
         }
         else
         {
-            Console.WriteLine("Nome inválido. Tente Novamente!");
+            Console.WriteLine("\nNome inválido. Tente Novamente!");
             return false;
         }
     }

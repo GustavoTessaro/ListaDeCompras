@@ -98,11 +98,27 @@ class Controller
         Console.Write("Digite o nome da categoria: ");
         string nome = Console.ReadLine() ?? "";
 
+        if(nome.Length > 50)
+        {
+            Console.WriteLine("O nome da categoria deve conter no máximo 50 caracteres. Tente Novamente!");
+            return false;
+        }
+
         if (nome != "")
         {
             string cor = EscolherCor(nome);
 
             Categoria novaCategoria = new Categoria(nome, cor);
+
+            foreach (var categoria in categorias)
+            {
+                if (categoria.getNome().Equals(nome, StringComparison.OrdinalIgnoreCase))
+                {
+                    Console.WriteLine("Já existe uma categoria com esse nome. Tente Novamente!");
+                    return false;
+                }
+            }
+
             categorias.Add(novaCategoria);
             Console.WriteLine($"Categoria '{novaCategoria.GetNomeComCor()}' cadastrada com sucesso!");
             return true;
@@ -410,6 +426,12 @@ class Controller
     {
         Console.Write("Digite o nome da lista de compras: ");
         string nomeLista = Console.ReadLine() ?? "";
+
+        if(nomeLista.Length < 3 || nomeLista.Length > 100)
+        {
+            Console.WriteLine("\nO nome da lista de compras deve conter entre 3 e 100 caracteres. Tente Novamente!");
+            return false;
+        }
 
         if (nomeLista != "")
         {

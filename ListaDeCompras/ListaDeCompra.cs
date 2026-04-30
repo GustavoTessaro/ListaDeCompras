@@ -153,6 +153,15 @@ class ListaDeCompra
                                     {
                                         if (categoria.getNome() == categoriaParaAdicionar.getNome())
                                         {
+                                            foreach (Produto produto in categoria.getProdutos())
+                                            {
+                                                if (produto.getNome() == produtoSelecionado.getNome())
+                                                {
+                                                    Console.WriteLine($"O produto '{produtoSelecionado.getNome()}' já existe na categoria '{categoria.GetNomeComCor()}' da lista de compras '{nome}'!");
+                                                    return false;
+                                                }
+                                            }
+
                                             categoria.getProdutos().Add(produtoSelecionado);
                                             totalDeProdutos++;
                                             valorTotal += produtoSelecionado.getPreco() * produtoSelecionado.getQuantidade();
