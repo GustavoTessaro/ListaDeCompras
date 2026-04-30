@@ -231,7 +231,7 @@ class ListaDeCompra
 
                 foreach (Produto produto in categoria.getProdutos())
                 {
-                    Console.WriteLine($"{posicaoProdutos} - {produto.getNome()} ({produto.getUnidadeDeMedida()}): R$ {produto.getPreco():F2}");
+                    Console.WriteLine($"{posicaoProdutos} - {produto.getNome()} ({produto.getUnidadeDeMedida()}): R$ {produto.getPreco():F2} - Quantidade: {produto.getQuantidade()}");
                     posicaoProdutos++;
                 }
                 posicaoCategorias++;
