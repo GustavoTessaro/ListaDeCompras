@@ -486,7 +486,7 @@ class Controller
             Console.WriteLine("Listas de Compras Cadastradas:");
             foreach (var lista in listaDeCompras)
             {
-                Console.WriteLine($"{posicao} - {lista.getNome()}, total de itens: {lista.getTotalDeProdutos()}, valor total: R${lista.getValorTotal():F2}");
+                Console.WriteLine($"{posicao} - {lista.getNome()}, total de itens: {lista.getTotalDeProdutos()}, valor total: R${lista.getValorTotal():F2}, data de criação: {lista.getDataCriacao():dd/MM/yyyy}, status: {lista.getStatus()}");
                 posicao++;
             }
             return true;
@@ -580,6 +580,76 @@ class Controller
 
     #region Métodos Itens da Lista de Compras
 
+    public bool ExcluirItensListaDeCompras()
+    {
+        bool verificaListaDeCompras = VisualizarListaDeCompras();
+
+        if (verificaListaDeCompras == true)
+        {
+            int numeroLista = 0;
+
+            try
+            {
+                Console.Write("Digite o número da lista de compras para a qual deseja excluir os itens: ");
+                numeroLista = int.Parse(Console.ReadLine() ?? "0");
+
+                if (numeroLista > 0 && numeroLista <= listaDeCompras.Count)
+                {
+                    return listaDeCompras[numeroLista - 1].ExcluirItens();
+                }
+                else
+                {
+                    Console.WriteLine("Número inválido. Tente Novamente!");
+                    return false;
+                }
+            }
+            catch (System.Exception)
+            {
+                Console.WriteLine("Número inválido. Tente Novamente!");
+                return false;
+            }
+        }
+        else
+        {
+            Console.WriteLine("Nenhuma categoria cadastrada. Cadastre uma categoria antes de visualizar os produtos.");
+            return false;
+        }
+    }
+    public bool CadastrarItensListaDeCompras()
+    {
+        bool verificaListaDeCompras = VisualizarListaDeCompras();
+
+        if (verificaListaDeCompras == true)
+        {
+            int numeroLista = 0;
+
+            try
+            {
+                Console.Write("Digite o número da lista de compras para a qual deseja cadastrar os itens: ");
+                numeroLista = int.Parse(Console.ReadLine() ?? "0");
+
+                if (numeroLista > 0 && numeroLista <= listaDeCompras.Count)
+                {
+                    return listaDeCompras[numeroLista - 1].CadastrarItens(categorias, this);
+                }
+                else
+                {
+                    Console.WriteLine("Número inválido. Tente Novamente!");
+                    return false;
+                }
+            }
+            catch (System.Exception)
+            {
+                Console.WriteLine("Número inválido. Tente Novamente!");
+                return false;
+            }
+        }
+        else
+        {
+            Console.WriteLine("Nenhuma categoria cadastrada. Cadastre uma categoria antes de visualizar os produtos.");
+            return false;
+        }
+    }
     public bool VisualizarItensListaDeCompras()
     {
         bool verificaListaDeCompras = VisualizarListaDeCompras();

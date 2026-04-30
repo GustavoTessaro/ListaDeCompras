@@ -5,6 +5,7 @@ class Produto
     private string nome;
     private string unidadeDeMedida;
     private double preco;
+    private double quantidade;
 
     #region Construtores
 
@@ -13,6 +14,7 @@ class Produto
         this.nome = nome;
         this.unidadeDeMedida = unidadeDeMedida;
         this.preco = preco;
+        this.quantidade = 0.0;
     }
     public Produto()
     {
@@ -47,6 +49,14 @@ class Produto
     {
         this.preco = preco;
     }
+    public double getQuantidade()
+    {
+        return this.quantidade;
+    }
+    public void setQuantidade(double quantidade)
+    {
+        this.quantidade = quantidade;
+    }
 
     #endregion
 
@@ -60,6 +70,9 @@ class Produto
 
     [JsonPropertyName("preco")]
     public double Preco_JSON { get => getPreco(); set => setPreco(value); }
+
+    [JsonPropertyName("quantidade")]
+    public double Quantidade_JSON { get => getQuantidade(); set => setQuantidade(value); }
 
     #endregion
 

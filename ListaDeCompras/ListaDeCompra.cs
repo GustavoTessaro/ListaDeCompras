@@ -102,9 +102,117 @@ class ListaDeCompra
 
     #region Métodos
 
+    public bool CadastrarItens(List<Categoria> categoriasParametro, Controller controller)
+    {
+        if (categoriasParametro.Count == 0)
+        {
+            Console.WriteLine("Nenhuma categoria foi adicionada à lista de compras.");
+            return false;
+        }
+        else
+        {
+            bool verificaCategorias = controller.VisualizarCategorias();
+
+            if (verificaCategorias == true)
+            {
+                int numeroCategoria = 0;
+
+                try
+                {
+                    Console.Write("Digite o número da categoria para a qual deseja adicionar o produto: ");
+                    numeroCategoria = int.Parse(Console.ReadLine() ?? "0");
+
+                    if (numeroCategoria > 0 && numeroCategoria <= categoriasParametro.Count)
+                    {
+                        Categoria categoriaSelecionada = categoriasParametro[numeroCategoria - 1];
+
+                        verificaCategorias = categoriaSelecionada.VisualizarProdutos();
+
+                        if (verificaCategorias == true)
+                        {
+                            Console.Write($"Digite o número do produto para o qual deseja adicionar à lista de compras {nome}: ");
+                            int numeroProduto = int.Parse(Console.ReadLine() ?? "0");
+
+                            if (numeroProduto > 0 && numeroProduto <= categoriaSelecionada.getProdutos().Count)
+                            {
+                                Produto produtoSelecionado = categoriaSelecionada.getProdutos()[numeroProduto - 1];
+
+                                Console.Write($"Digite a quantidade do produto '{produtoSelecionado.getNome()}' que deseja adicionar à lista de compras '{nome}': ");
+                                double quantidade = double.Parse(Console.ReadLine() ?? "0");
+
+                                produtoSelecionado.setQuantidade(quantidade);
+
+                                Categoria categoriaParaAdicionar = new Categoria(categoriaSelecionada.getNome(), categoriaSelecionada.getCor());
+                                categoriaParaAdicionar.getProdutos().Add(produtoSelecionado);
+
+                                if (categorias.Count > 0)
+                                {
+                                    bool verificaCategoriaExistente = false;
+
+                                    foreach (Categoria categoria in categorias)
+                                    {
+                                        if (categoria.getNome() == categoriaParaAdicionar.getNome())
+                                        {
+                                            categoria.getProdutos().Add(produtoSelecionado);
+                                            totalDeProdutos++;
+                                            valorTotal += produtoSelecionado.getPreco() * produtoSelecionado.getQuantidade();
+                                            verificaCategoriaExistente = true;
+                                            break;
+                                        }
+                                    }
+
+                                    if (verificaCategoriaExistente == false)
+                                    {
+                                        categorias.Add(categoriaParaAdicionar);
+                                        totalDeProdutos++;
+                                        valorTotal += produtoSelecionado.getPreco() * produtoSelecionado.getQuantidade();
+                                    }
+
+                                }
+                                else
+                                {
+                                    categorias.Add(categoriaParaAdicionar);
+                                    totalDeProdutos++;
+                                    valorTotal += produtoSelecionado.getPreco() * produtoSelecionado.getQuantidade();
+                                }
+
+                                Console.WriteLine($"Produto '{produtoSelecionado.getNome()}' adicionado à lista de compras '{nome}' com sucesso!");
+
+                                return true;
+                            }
+                            else
+                            {
+                                Console.WriteLine("Número do produto inválido. Tente novamente.");
+                                return false;
+                            }
+                        }
+                        else
+                        {
+                            return false;
+                        }
+                    }
+                    else
+                    {
+                        Console.WriteLine("Número inválido. Tente Novamente!");
+                        return false;
+                    }
+                }
+                catch (System.Exception)
+                {
+                    Console.WriteLine("Número inválido. Tente Novamente!");
+                    return false;
+                }
+            }
+            else
+            {
+                Console.WriteLine("Nenhuma categoria cadastrada. Cadastre uma categoria antes de visualizar os produtos.");
+                return false;
+            }
+        }
+    }
     public bool VisualizarItens()
     {
-        if(categorias.Count == 0)
+        if (categorias.Count == 0)
         {
             Console.WriteLine("Não há Itens nesta lista de compras.");
             return false;
@@ -113,17 +221,92 @@ class ListaDeCompra
         {
             Console.WriteLine($"Itens da Lista de Compras \"{nome}\": ");
 
+            int posicaoCategorias = 1;
+
             foreach (Categoria categoria in categorias)
             {
-                Console.WriteLine($"\nCategoria: {categoria.getNome()}");
+                Console.WriteLine($"\n{posicaoCategorias} - Categoria: {categoria.GetNomeComCor()}");
+
+                int posicaoProdutos = 1;
 
                 foreach (Produto produto in categoria.getProdutos())
                 {
-                    Console.WriteLine($"- {produto.getNome()} ({produto.getUnidadeDeMedida()}): R$ {produto.getPreco():F2}");
+                    Console.WriteLine($"{posicaoProdutos} - {produto.getNome()} ({produto.getUnidadeDeMedida()}): R$ {produto.getPreco():F2}");
+                    posicaoProdutos++;
                 }
+                posicaoCategorias++;
             }
 
             return true;
+        }
+    }
+    public bool ExcluirItens()
+    {
+        if (categorias.Count == 0)
+        {
+            Console.WriteLine("Não há Itens nesta lista de compras para excluir.");
+            return false;
+        }
+        else
+        {
+            bool verificaItens = VisualizarItens();
+
+            int numeroCategoria = 0;
+
+            try
+            {
+                Console.Write("Digite o número da categoria do produto que deseja excluir: ");
+                numeroCategoria = int.Parse(Console.ReadLine() ?? "0");
+
+                if (numeroCategoria > 0 && numeroCategoria <= categorias.Count)
+                {
+                    bool verificaProdutos = categorias[numeroCategoria - 1].VisualizarProdutos();
+
+                    if (verificaProdutos == true)
+                    {
+                        Console.Write($"Digite o número do produto que deseja excluir da lista de compras '{nome}': ");
+                        int numeroProduto = int.Parse(Console.ReadLine() ?? "0");
+
+                        if (numeroProduto > 0 && numeroProduto <= categorias[numeroCategoria - 1].getProdutos().Count)
+                        {
+                            Produto produtoSelecionado = categorias[numeroCategoria - 1].getProdutos()[numeroProduto - 1];
+
+                            valorTotal -= produtoSelecionado.getPreco() * produtoSelecionado.getQuantidade();
+                            totalDeProdutos--;
+
+                            categorias[numeroCategoria - 1].getProdutos().RemoveAt(numeroProduto - 1);
+
+                            if (categorias[numeroCategoria - 1].getProdutos().Count == 0)
+                            {
+                                categorias.RemoveAt(numeroCategoria - 1);
+                            }
+
+                            Console.WriteLine($"Produto '{produtoSelecionado.getNome()}' excluído da lista de compras '{nome}' com sucesso!");
+
+                            return true;
+                        }
+                        else
+                        {
+                            Console.WriteLine("Número do produto inválido. Tente novamente.");
+                            return false;
+                        }
+                    }
+                    else
+                    {
+                        return false;
+                    }
+                }
+                else
+                {
+                    Console.WriteLine("Número da categoria inválido. Tente novamente.");
+                    return false;
+                }
+            }
+            catch (System.Exception)
+            {
+                Console.WriteLine("Número inválido. Tente Novamente!");
+                return false;
+            }
         }
     }
 
