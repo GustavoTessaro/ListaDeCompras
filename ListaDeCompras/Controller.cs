@@ -33,6 +33,9 @@ class Controller
     [JsonPropertyName("categorias")]
     public List<Categoria> Categorias_JSON { get => getCategorias(); set => setCategorias(value); }
 
+    [JsonPropertyName("listasDeCompras")]
+    public List<ListaDeCompra> ListasDeCompras_JSON { get => this.listaDeCompras; set => this.listaDeCompras = value; }
+
     #endregion
 
     #region Métodos Categorias
