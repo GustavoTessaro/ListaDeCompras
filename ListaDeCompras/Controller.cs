@@ -3,6 +3,7 @@ using System.Text.Json.Serialization;
 class Controller
 {
     private List<Categoria> categorias;
+    private List<ListaDeCompra> listaDeCompras;
 
     #region Construtores
     public Controller()
@@ -365,7 +366,7 @@ class Controller
     {
         bool verificaCategorias = VisualizarCategorias();
 
-        if(verificaCategorias == true)
+        if (verificaCategorias == true)
         {
             int numeroCategoria = 0;
 
@@ -395,6 +396,184 @@ class Controller
             Console.WriteLine("Nenhuma categoria cadastrada. Cadastre uma categoria antes de visualizar os produtos.");
             return false;
         }
+    }
+
+    #endregion
+
+    #region Métodos Lista de Compra
+
+    public bool CadastrarListaDeCompras()
+    {
+        Console.Write("Digite o nome da lista de compras: ");
+        string nomeLista = Console.ReadLine() ?? "";
+
+        if (nomeLista != "")
+        {
+            ListaDeCompra novaLista = new ListaDeCompra(nomeLista);
+            listaDeCompras.Add(novaLista);
+            Console.WriteLine($"Lista de compras '{novaLista.getNome()}' cadastrada com sucesso!");
+            return true;
+        }
+        else
+        {
+            Console.WriteLine("Nome inválido. Tente Novamente!");
+            return false;
+        }
+    }
+    public bool ExcluirListaDeCompras()
+    {
+        bool verificaListas = VisualizarListaDeCompras();
+
+        if (verificaListas == true)
+        {
+            int numeroLista = 0;
+
+            try
+            {
+                Console.Write("Digite o número da lista que deseja excluir: ");
+                numeroLista = int.Parse(Console.ReadLine() ?? "0");
+
+                if (numeroLista > 0 && numeroLista <= listaDeCompras.Count)
+                {
+                    ListaDeCompra listaSelecionada = listaDeCompras[numeroLista - 1];
+
+                    if (listaSelecionada.getCategorias().Count == 0)
+                    {
+                        Console.WriteLine($"Tem certeza que deseja excluir a lista '{listaSelecionada.getNome()}'? (s/n)");
+                        char resposta = Console.ReadKey(true).KeyChar;
+
+                        if (resposta == 's' || resposta == 'S')
+                        {
+                            listaDeCompras.RemoveAt(numeroLista - 1);
+                            Console.WriteLine($"Lista '{listaSelecionada.getNome()}' excluída com sucesso!");
+                            return true;
+                        }
+                        else
+                        {
+                            Console.WriteLine("Exclusão cancelada.");
+                            return false;
+                        }
+                    }
+                    else
+                    {
+                        Console.WriteLine("Não é possível excluir uma lista que possui produtos cadastrados.");
+                        return false;
+                    }
+                }
+                else
+                {
+                    Console.WriteLine("Número inválido. Tente Novamente!");
+                    return false;
+                }
+            }
+            catch (System.Exception)
+            {
+                Console.WriteLine("Número inválido. Tente Novamente!");
+                return false;
+            }
+        }
+        else
+        {
+            Console.WriteLine("Nenhuma lista de compras cadastrada.");
+            return false;
+        }
+    }
+    public bool VisualizarListaDeCompras()
+    {
+        if (listaDeCompras.Count > 0)
+        {
+            int posicao = 1;
+            Console.WriteLine("Listas de Compras Cadastradas:");
+            foreach (var lista in listaDeCompras)
+            {
+                Console.WriteLine($"{posicao} - {lista.getNome()}, total de itens: {lista.getTotalDeProdutos()}, valor total: R${lista.getValorTotal():F2}");
+                posicao++;
+            }
+            return true;
+        }
+        else
+        {
+            Console.WriteLine("Nenhuma lista de compras cadastrada.");
+            return false;
+        }
+    }
+    public bool EditarListaDeCompras()
+    {
+            bool verificaListas = VisualizarListaDeCompras();
+    
+            if (verificaListas == true)
+            {
+                int numeroLista = 0;
+    
+                try
+                {
+                    Console.Write("Digite o número da lista que deseja editar: ");
+                    numeroLista = int.Parse(Console.ReadLine() ?? "0");
+    
+                    if (numeroLista > 0 && numeroLista <= listaDeCompras.Count)
+                    {
+                        bool verificaEditado = false;
+
+                        Console.Write($"Digite o novo nome para a lista '{listaDeCompras[numeroLista - 1].getNome()}' (ou pressione Enter para manter o nome atual): ");
+                        string novoNome = Console.ReadLine() ?? "";
+    
+                        if (novoNome != "")
+                        {
+                            listaDeCompras[numeroLista - 1].setNome(novoNome);
+                            Console.WriteLine($"Lista de compras '{listaDeCompras[numeroLista - 1].getNome()}' editada com sucesso!");
+                            verificaEditado = true;
+                        }
+                        
+                        Console.Write("Digite o novo status para a lista (1 - Aberta / 2 - Concluída) (ou pressione Enter para manter o status atual): ");
+                        string novoStatus = Console.ReadLine() ?? "";
+
+                        if (novoStatus != "")
+                        {
+                            if (novoStatus == "1")
+                            {
+                                listaDeCompras[numeroLista - 1].setStatus("Aberta");
+                                Console.WriteLine($"Status da lista de compras '{listaDeCompras[numeroLista - 1].getNome()}' editado com sucesso!");
+                                verificaEditado = true;
+                            }
+                            else if (novoStatus == "2")
+                            {
+                                listaDeCompras[numeroLista - 1].setStatus("Concluída");
+                                Console.WriteLine($"Status da lista de compras '{listaDeCompras[numeroLista - 1].getNome()}' editado com sucesso!");
+                                verificaEditado = true;
+                            }
+                            else
+                            {
+                                Console.WriteLine("Opção inválida. Tente Novamente!");
+                            }
+                        }
+
+                        if (verificaEditado == false)
+                        {
+                            Console.WriteLine("Nenhuma alteração feita na lista de compras.");
+                            return false;
+                        }
+                        else
+                        {
+                            return true;
+                        }
+                    }
+                    else
+                    {
+                        Console.WriteLine("Número inválido. Tente Novamente!");
+                        return false;
+                    }
+                }
+                catch (System.Exception)
+                {
+                    Console.WriteLine("Número inválido. Tente Novamente!");
+                    return false;
+                }
+            }
+            else
+            {
+                Console.WriteLine("Nenhuma lista de compras cadastrada. Cadastre uma lista antes de editar.");
+                return false;
+            }
     }
 
     #endregion
