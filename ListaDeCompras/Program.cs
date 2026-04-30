@@ -113,12 +113,11 @@ class Program
             Console.WriteLine("1 - Cadastrar Item na Lista de Compras");
             Console.WriteLine("2 - Excluir Item da Lista de Compras");
             Console.WriteLine("3 - Visualizar Itens da Lista de Compras");
-            Console.WriteLine("4 - ");
-            Console.WriteLine("5 - Sair");
+            Console.WriteLine("4 - Sair");
             Console.WriteLine("---------------------------------");
             Console.Write("> ");
             opcao = (int)char.GetNumericValue(Console.ReadKey(true).KeyChar);
-        } while (opcao != 1 && opcao != 2 && opcao != 3 && opcao != 4 && opcao != 5);
+        } while (opcao != 1 && opcao != 2 && opcao != 3 && opcao != 4);
 
         return opcao;
     }
@@ -137,10 +136,128 @@ class Program
                 case 1:
                     #region Gerenciar Categorias
 
+                    int opcaoCategorias = 0;
+                    bool verificaCategorias = false;
+
+                    do
+                    {
+                        opcaoCategorias = ObterEscolhaMenuCategorias();
+
+                        switch (opcaoCategorias)
+                        {
+                            case 1:
+                                Console.Clear();
+                                verificaCategorias = controller.CadastrarCategoria();
+                                if (verificaCategorias == true)
+                                {
+                                    salvar(controller);
+                                }
+                                Thread.Sleep(3000);
+                                while (Console.KeyAvailable) Console.ReadKey(true);
+                                Console.Clear();
+                                break;
+                            case 2:
+                                Console.Clear();
+                                verificaCategorias = controller.EditarCategoria();
+                                if (verificaCategorias == true)
+                                {
+                                    salvar(controller);
+                                }
+                                Thread.Sleep(3000);
+                                while (Console.KeyAvailable) Console.ReadKey(true);
+                                Console.Clear();
+                                break;
+                            case 3:
+                                Console.Clear();
+                                verificaCategorias = controller.ExcluirCategoria();
+                                if (verificaCategorias == true)
+                                {
+                                    salvar(controller);
+                                }
+                                Thread.Sleep(3000);
+                                while (Console.KeyAvailable) Console.ReadKey(true);
+                                Console.Clear();
+                                break;
+                            case 4:
+                                Console.Clear();
+                                controller.VisualizarCategorias();
+                                Console.WriteLine("\nPressione qualquer tecla para continuar...");
+                                Console.ReadKey(true);
+                                Console.Clear();
+                                break;
+                            case 5:
+                                Console.WriteLine("Saindo...");
+                                Thread.Sleep(3000);
+                                while (Console.KeyAvailable) Console.ReadKey(true);
+                                Console.Clear();
+                                break;
+                        }
+
+                    } while (opcaoCategorias != 5);
+
                     #endregion
                     break;
                 case 2:
                     #region Gerenciar Produtos
+
+                    int opcaoProdutos = 0;
+                    bool verificaProdutos = false;
+
+                    do
+                    {
+                        opcaoProdutos = ObterEscolhaMenuProdutos();
+
+                        switch (opcaoProdutos)
+                        {
+                            case 1:
+                                Console.Clear();
+                                verificaProdutos = controller.CadastrarProduto();
+                                if (verificaProdutos == true)
+                                {
+                                    salvar(controller);
+                                }
+                                Thread.Sleep(3000);
+                                while (Console.KeyAvailable) Console.ReadKey(true);
+                                Console.Clear();
+                                break;
+                            case 2:
+                                Console.Clear();
+                                verificaProdutos = controller.EditarProduto();
+                                if (verificaProdutos == true)
+                                {
+                                    salvar(controller);
+                                }
+                                Thread.Sleep(3000);
+                                while (Console.KeyAvailable) Console.ReadKey(true);
+                                Console.Clear();
+                                break;
+                            case 3:
+                                Console.Clear();
+                                verificaProdutos = controller.ExcluirProduto();
+                                if (verificaProdutos == true)
+                                {
+                                    salvar(controller);
+                                }
+                                Thread.Sleep(3000);
+                                while (Console.KeyAvailable) Console.ReadKey(true);
+                                Console.Clear();
+                                break;
+                            case 4:
+                                Console.Clear();
+                                controller.VisualizarProdutos();
+                                Console.WriteLine("\nPressione qualquer tecla para continuar...");
+                                Console.ReadKey(true);
+                                Console.Clear();
+                                break;
+                            case 5:
+                                Console.WriteLine("Saindo...");
+                                Thread.Sleep(3000);
+                                while (Console.KeyAvailable) Console.ReadKey(true);
+                                Console.Clear();
+                                break;
+                        }
+
+                    } while (opcaoProdutos != 5);
 
                     #endregion
                     break;
