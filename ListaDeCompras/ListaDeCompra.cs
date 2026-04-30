@@ -102,7 +102,30 @@ class ListaDeCompra
 
     #region Métodos
 
-    
+    public bool VisualizarItens()
+    {
+        if(categorias.Count == 0)
+        {
+            Console.WriteLine("Não há Itens nesta lista de compras.");
+            return false;
+        }
+        else
+        {
+            Console.WriteLine($"Itens da Lista de Compras \"{nome}\": ");
+
+            foreach (Categoria categoria in categorias)
+            {
+                Console.WriteLine($"\nCategoria: {categoria.getNome()}");
+
+                foreach (Produto produto in categoria.getProdutos())
+                {
+                    Console.WriteLine($"- {produto.getNome()} ({produto.getUnidadeDeMedida()}): R$ {produto.getPreco():F2}");
+                }
+            }
+
+            return true;
+        }
+    }
 
     #endregion
 

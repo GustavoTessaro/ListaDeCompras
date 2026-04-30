@@ -328,6 +328,54 @@ class Program
                 case 4:
                     #region Gerenciar Itens da Lista de Compras
 
+                    int opcaoItensListaDeCompras = 0;
+                    bool verificaItensListaDeCompras = false;
+
+                    do
+                    {
+                        opcaoItensListaDeCompras = ObterEscolhaMenuItensListaDeCompras();
+
+                        switch (opcaoItensListaDeCompras)
+                        {
+                            case 1:
+                                Console.Clear();
+                                verificaItensListaDeCompras = controller.CadastrarItensListaDeCompras();
+                                if (verificaItensListaDeCompras == true)
+                                {
+                                    salvar(controller);
+                                }
+                                Thread.Sleep(3000);
+                                while (Console.KeyAvailable) Console.ReadKey(true);
+                                Console.Clear();
+                                break;
+                            case 2:
+                                Console.Clear();
+                                verificaItensListaDeCompras = controller.ExcluirItensListaDeCompras();
+                                if (verificaItensListaDeCompras == true)
+                                {
+                                    salvar(controller);
+                                }
+                                Thread.Sleep(3000);
+                                while (Console.KeyAvailable) Console.ReadKey(true);
+                                Console.Clear();
+                                break;
+                            case 3:
+                                Console.Clear();
+                                controller.VisualizarItensListaDeCompras();
+                                Console.WriteLine("\nPressione qualquer tecla para continuar...");
+                                Console.ReadKey(true);
+                                Console.Clear();
+                                break;
+                            case 4:
+                                Console.WriteLine("Saindo...");
+                                Thread.Sleep(3000);
+                                while (Console.KeyAvailable) Console.ReadKey(true);
+                                Console.Clear();
+                                break;
+                        }
+
+                    } while (opcaoItensListaDeCompras != 4);
+
                     #endregion
                     break;
                 case 5:

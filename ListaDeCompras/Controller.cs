@@ -499,81 +499,121 @@ class Controller
     }
     public bool EditarListaDeCompras()
     {
-            bool verificaListas = VisualizarListaDeCompras();
-    
-            if (verificaListas == true)
-            {
-                int numeroLista = 0;
-    
-                try
-                {
-                    Console.Write("Digite o número da lista que deseja editar: ");
-                    numeroLista = int.Parse(Console.ReadLine() ?? "0");
-    
-                    if (numeroLista > 0 && numeroLista <= listaDeCompras.Count)
-                    {
-                        bool verificaEditado = false;
+        bool verificaListas = VisualizarListaDeCompras();
 
-                        Console.Write($"Digite o novo nome para a lista '{listaDeCompras[numeroLista - 1].getNome()}' (ou pressione Enter para manter o nome atual): ");
-                        string novoNome = Console.ReadLine() ?? "";
-    
-                        if (novoNome != "")
+        if (verificaListas == true)
+        {
+            int numeroLista = 0;
+
+            try
+            {
+                Console.Write("Digite o número da lista que deseja editar: ");
+                numeroLista = int.Parse(Console.ReadLine() ?? "0");
+
+                if (numeroLista > 0 && numeroLista <= listaDeCompras.Count)
+                {
+                    bool verificaEditado = false;
+
+                    Console.Write($"Digite o novo nome para a lista '{listaDeCompras[numeroLista - 1].getNome()}' (ou pressione Enter para manter o nome atual): ");
+                    string novoNome = Console.ReadLine() ?? "";
+
+                    if (novoNome != "")
+                    {
+                        listaDeCompras[numeroLista - 1].setNome(novoNome);
+                        Console.WriteLine($"Lista de compras '{listaDeCompras[numeroLista - 1].getNome()}' editada com sucesso!");
+                        verificaEditado = true;
+                    }
+
+                    Console.Write("Digite o novo status para a lista (1 - Aberta / 2 - Concluída) (ou pressione Enter para manter o status atual): ");
+                    string novoStatus = Console.ReadLine() ?? "";
+
+                    if (novoStatus != "")
+                    {
+                        if (novoStatus == "1")
                         {
-                            listaDeCompras[numeroLista - 1].setNome(novoNome);
-                            Console.WriteLine($"Lista de compras '{listaDeCompras[numeroLista - 1].getNome()}' editada com sucesso!");
+                            listaDeCompras[numeroLista - 1].setStatus("Aberta");
+                            Console.WriteLine($"Status da lista de compras '{listaDeCompras[numeroLista - 1].getNome()}' editado com sucesso!");
                             verificaEditado = true;
                         }
-                        
-                        Console.Write("Digite o novo status para a lista (1 - Aberta / 2 - Concluída) (ou pressione Enter para manter o status atual): ");
-                        string novoStatus = Console.ReadLine() ?? "";
-
-                        if (novoStatus != "")
+                        else if (novoStatus == "2")
                         {
-                            if (novoStatus == "1")
-                            {
-                                listaDeCompras[numeroLista - 1].setStatus("Aberta");
-                                Console.WriteLine($"Status da lista de compras '{listaDeCompras[numeroLista - 1].getNome()}' editado com sucesso!");
-                                verificaEditado = true;
-                            }
-                            else if (novoStatus == "2")
-                            {
-                                listaDeCompras[numeroLista - 1].setStatus("Concluída");
-                                Console.WriteLine($"Status da lista de compras '{listaDeCompras[numeroLista - 1].getNome()}' editado com sucesso!");
-                                verificaEditado = true;
-                            }
-                            else
-                            {
-                                Console.WriteLine("Opção inválida. Tente Novamente!");
-                            }
-                        }
-
-                        if (verificaEditado == false)
-                        {
-                            Console.WriteLine("Nenhuma alteração feita na lista de compras.");
-                            return false;
+                            listaDeCompras[numeroLista - 1].setStatus("Concluída");
+                            Console.WriteLine($"Status da lista de compras '{listaDeCompras[numeroLista - 1].getNome()}' editado com sucesso!");
+                            verificaEditado = true;
                         }
                         else
                         {
-                            return true;
+                            Console.WriteLine("Opção inválida. Tente Novamente!");
                         }
+                    }
+
+                    if (verificaEditado == false)
+                    {
+                        Console.WriteLine("Nenhuma alteração feita na lista de compras.");
+                        return false;
                     }
                     else
                     {
-                        Console.WriteLine("Número inválido. Tente Novamente!");
-                        return false;
+                        return true;
                     }
                 }
-                catch (System.Exception)
+                else
                 {
                     Console.WriteLine("Número inválido. Tente Novamente!");
                     return false;
                 }
             }
-            else
+            catch (System.Exception)
             {
-                Console.WriteLine("Nenhuma lista de compras cadastrada. Cadastre uma lista antes de editar.");
+                Console.WriteLine("Número inválido. Tente Novamente!");
                 return false;
             }
+        }
+        else
+        {
+            Console.WriteLine("Nenhuma lista de compras cadastrada. Cadastre uma lista antes de editar.");
+            return false;
+        }
+    }
+
+    #endregion
+
+    #region Métodos Itens da Lista de Compras
+
+    public bool VisualizarItensListaDeCompras()
+    {
+        bool verificaListaDeCompras = VisualizarListaDeCompras();
+
+        if (verificaListaDeCompras == true)
+        {
+            int numeroLista = 0;
+
+            try
+            {
+                Console.Write("Digite o número da lista de compras para a qual deseja visualizar os itens: ");
+                numeroLista = int.Parse(Console.ReadLine() ?? "0");
+
+                if (numeroLista > 0 && numeroLista <= listaDeCompras.Count)
+                {
+                    return listaDeCompras[numeroLista - 1].VisualizarItens();
+                }
+                else
+                {
+                    Console.WriteLine("Número inválido. Tente Novamente!");
+                    return false;
+                }
+            }
+            catch (System.Exception)
+            {
+                Console.WriteLine("Número inválido. Tente Novamente!");
+                return false;
+            }
+        }
+        else
+        {
+            Console.WriteLine("Nenhuma categoria cadastrada. Cadastre uma categoria antes de visualizar os produtos.");
+            return false;
+        }
     }
 
     #endregion
